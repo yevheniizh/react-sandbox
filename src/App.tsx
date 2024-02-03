@@ -1,31 +1,28 @@
-import { FC } from 'react';
-import { GenericList } from './components/GenericList/GenericList';
-import { withPropsLogging } from './HOC/withPropsLogging';
+import { FC, PropsWithChildren, useState } from 'react';
 
 import './style.css';
 
-type TButtonProps = {
-  id: number;
-};
-
-type TButtonsWrapperProps = {
-  data: Array<TButtonProps>;
-};
-
-const Button = ({ id }: TButtonProps) => <div key={id}>ID - {id}</div>;
-
-const ButtonsWrapper = ({ data }: TButtonsWrapperProps) => {
-  return <GenericList data={data} renderItem={Button} />;
-};
-
-const ButtonsWrapperLogger = withPropsLogging(ButtonsWrapper);
-
-export const App: FC<{ name: string }> = ({ name }) => {
+const ButtonsWrapper = ({ children }: PropsWithChildren) => {
+  console.log('From Parent');
+  const [amount, setAmount] = useState(0);
   return (
-    <div>
-      <ButtonsWrapperLogger
-        data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]}
-      />
-    </div>
+    <>
+      {amount}
+      <button onClick={() => setAmount(amount + 1)}>+1</button>
+      {children}
+    </>
+  );
+};
+
+const Test = () => {
+  console.log('From Children');
+  return <div>Children</div>;
+};
+
+export const App = () => {
+  return (
+    <ButtonsWrapper>
+      <Test />
+    </ButtonsWrapper>
   );
 };
